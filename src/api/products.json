@@ -1,0 +1,89 @@
+[
+	{
+		"id": 1,
+		"title": "Ventilador",
+		"description": "Ventilador de techo",
+		"price": 4000,
+		"thumbnail": [
+			"ruta-imagen-1.jpg"
+		],
+		"code": "001",
+		"category": "aire",
+		"stock": 50,
+		"status": true
+	},
+	{
+		"id": 2,
+		"title": "Ventilador de pie",
+		"description": "Caño de acero",
+		"price": 1500,
+		"thumbnail": [
+			"ruta-imagen-2.jpg"
+		],
+		"code": "002",
+		"category": "aire",
+		"stock": 20,
+		"status": true
+	},
+	{
+		"id": 3,
+		"title": "Ventilador 3 posiciones",
+		"description": "Distintos soportes",
+		"price": 8500,
+		"thumbnail": "ruta-imagen-3.jpg",
+		"code": "003",
+		"category": "aire",
+		"stock": 30,
+		"status": true
+	},
+	{
+		"id": 4,
+		"title": "Pantalla",
+		"description": "Pantalla LED",
+		"price": 6400,
+		"thumbnail": [
+			"ruta-imagen-4.jpg"
+		],
+		"code": "004",
+		"category": "tv",
+		"stock": 430,
+		"status": true
+	},
+	{
+		"id": 5,
+		"title": "Televisor",
+		"description": "Pantalla plana",
+		"price": 32000,
+		"thumbnail": "ruta-imagen-5.jpg",
+		"code": "005",
+		"category": "tv",
+		"stock": 500,
+		"status": true
+	},
+	{
+		"id": 6,
+		"title": "A30",
+		"description": "Samsung",
+		"price": 13500,
+		"thumbnail": [
+			"ruta-imagen-6.jpg"
+		],
+		"code": "006",
+		"category": "telefono",
+		"stock": 600,
+		"status": true
+	},
+	{
+		"id": 7,
+		"title": "Moto 50A",
+		"description": "Motorola",
+		"price": 680000,
+		"thumbnail": [
+			"ruta-imagen-7.jpg"
+		],
+		"code": "007",
+		"category": "telefono",
+		"stock": 70,
+		"status": true
+	}
+]
