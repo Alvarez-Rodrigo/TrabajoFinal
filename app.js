@@ -1,17 +1,60 @@
-import express from "express"
-import productsRouter from "./src/routes/products.router"
-import cartsRouter from "./src/routes/carts.router.js"
+import express from 'express'
+import exphbs from 'express-handlebars'
+import mongoose from 'mongoose'
+import { Server } from 'socket.io'
+import { __dirname, PORT, MONGO_DB_NAME, MONGO_URI } from './utils.js'
+
+import messageModel from './dao/models/messages.model.js'
+import productsRouter from './routes/products.router.js'
+import cartsRouter from './routes/carts.router.js'
+import viewsProductsRouter from './routes/views.router.js'
 
 const app = express()
 app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 
-app.get("/", (req, res) => res.status(200).json({ message: "Server Ok" }))
+mongoose.set("strictQuery", false)
 
-app.use("/api/products", productsRouter)
-app.use("/api/carts", cartsRouter)
+try {
+    await mongoose.connect(`${MONGO_URI}${MONGO_DB_NAME}`)
+    console.log("DB Running.....")
+    
+    const httpServer = app.listen(PORT, () => console.log(`Server listo para correr ${PORT} ...`))
 
+    const io = new Server(httpServer)
+    app.set('socketio', io)
 
+    app.use(express.static(__dirname + '/public'))
 
-const PORT = process.env.PORT || 8080
-const server = app.listen(PORT, () => console.log(`Server is running at http://localhost:${PORT}`))
-server.on('err', err => console.log(`Express server error: ${err.message}`))
+    app.engine('.hbs', exphbs.engine({ extname: '.hbs' }))
+    app.set('views', __dirname + '/views')
+    app.set('view engine', '.hbs')
+
+    app.get('/', (req, res) => res.render('index', { name: 'Backend' }))
+    app.use('/api/products', productsRouter)
+    app.use('/api/carts', cartsRouter)
+    app.use('/products', viewsProductsRouter)
+
+    io.on('connection', async (socket) => {
+        socket.on('productList', (data) => {
+            console.log(data)
+            io.emit('updatedProducts', data)
+        })
+        socket.on('cartList', (data) => {
+            io.emit('updatedCarts', data)
+        })
+
+        let messages = (await messageModel.find()) ? await messageModel.find() : []
+
+        socket.broadcast.emit('alerta')
+        socket.emit('logs', messages)
+        socket.on('message', (data) => {
+            messages.push(data)
+            messageModel.create(messages)
+            io.emit('logs', messages)
+        })
+    })
+} catch (error) {
+    console.log(`Cannot connect to dataBase: ${error}`)
+    process.exit()
+}
